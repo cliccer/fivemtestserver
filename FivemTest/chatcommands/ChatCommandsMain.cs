@@ -10,7 +10,7 @@ namespace FivemTest.chatcommands
     {
         public static void InitAllChatCommands()
         {
-            PlayerPedCommands.InitPlayerPedCommands();
+            PlayerCommands.InitPlayerPedCommands();
             VehicleCommands.InitVehicleCommands();
             WorldCommands.InitWorldCommands();
         }

@@ -4,12 +4,10 @@ using FivemTest.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FivemTest.chatcommands
 {
-    public class PlayerPedCommands : BaseScript
+    public class PlayerCommands : BaseScript
     {
         public static void InitPlayerPedCommands()
         {
@@ -44,6 +42,7 @@ namespace FivemTest.chatcommands
             }
             ), false);
 
+
             API.RegisterCommand("tp", new Action<int, List<object>, string>((src, args, raw) =>
             {
                 var waypoint = API.GetFirstBlipInfoId(8);
@@ -51,9 +50,9 @@ namespace FivemTest.chatcommands
                 var waypointCoords = API.GetBlipCoords(waypoint);
 
                 float height = 0f;
+                int attempts = 0;
                 for (int i = 0; i < 100; i++)
                 {
-                    int attempts = 0;
                     attempts++;
                     height = 1000f;
 
@@ -68,9 +67,24 @@ namespace FivemTest.chatcommands
 
                 Game.PlayerPed.Position = new Vector3(waypointCoords[0], waypointCoords[1], height + 2f);
 
-                ChatUtil.SendMessageToClient("[TP]", "Processing is done", 255, 255, 255);
+                ChatUtil.SendMessageToClient("[TP]", "Processing is done, attemps: " + attempts, 255, 255, 255);
             }
             ), false);
+
+
+            API.RegisterCommand("coords", new Action<int>(src =>
+            {
+                var playerLocation = Game.PlayerPed.Position;
+                ChatUtil.SendMessageToClient("[Coords", "Your coordinates are x " + playerLocation.X + " y " + playerLocation.Y, 255, 255, 255);
+            }), false);
+
+            API.RegisterCommand("revive", new Action<int>(src =>
+            {
+                if (Game.PlayerPed.IsDead)
+                {
+                    Game.PlayerPed.Resurrect();
+                }
+            }), false);
         }
 
     }

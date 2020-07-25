@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="chatcommands\ChatCommandsMain.cs" />
     <Compile Include="chatcommands\WorldCommands.cs" />
-    <Compile Include="chatcommands\PlayerPedCommands.cs" />
+    <Compile Include="chatcommands\PlayerCommands.cs" />
     <Compile Include="chatcommands\VehicleCommands.cs" />
     <Compile Include="FivemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
