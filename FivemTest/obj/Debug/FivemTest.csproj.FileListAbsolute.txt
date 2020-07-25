@@ -1,0 +1,14 @@
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\FivemTest.net.dll
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\FivemTest.net.pdb
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\CitizenFX.Core.dll
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\System.Reflection.Metadata.dll
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\System.Collections.Immutable.dll
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\MsgPack.dll
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\CitizenFX.Core.pdb
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\CitizenFX.Core.xml
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\bin\Debug\MsgPack.xml
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\obj\Debug\FivemTest.csprojAssemblyReference.cache
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\obj\Debug\FivemTest.csproj.CoreCompileInputs.cache
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\obj\Debug\FivemTest.csproj.CopyComplete
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\obj\Debug\FivemTest.net.dll
+C:\Users\Jørgen\Documents\fivemtest\FivemTestServer\FivemTest\obj\Debug\FivemTest.net.pdb
