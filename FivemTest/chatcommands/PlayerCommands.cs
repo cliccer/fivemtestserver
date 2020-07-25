@@ -49,25 +49,11 @@ namespace FivemTest.chatcommands
 
                 var waypointCoords = API.GetBlipCoords(waypoint);
 
-                float height = 0f;
-                int attempts = 0;
-                for (int i = 0; i < 100; i++)
-                {
-                    attempts++;
-                    height = 1000f;
+                float height = 10000f;
 
-                    API.GetGroundZFor_3dCoord(waypointCoords[0] + i, waypointCoords[1] + i, height, ref height, false);
-
-                    if (height != 0f && height != 1000f)
-                    {
-                        ChatUtil.SendMessageToClient("[TP]", "Attempts : " + attempts + " Height is " + height, 255, 255, 255);
-                        i = 1000;
-                    }
-                }
-
+                API.GetGroundZFor_3dCoord(waypointCoords[0], waypointCoords[1], height, ref height, false);
                 Game.PlayerPed.Position = new Vector3(waypointCoords[0], waypointCoords[1], height + 2f);
 
-                ChatUtil.SendMessageToClient("[TP]", "Processing is done, attemps: " + attempts, 255, 255, 255);
             }
             ), false);
 
@@ -75,7 +61,7 @@ namespace FivemTest.chatcommands
             API.RegisterCommand("coords", new Action<int>(src =>
             {
                 var playerLocation = Game.PlayerPed.Position;
-                ChatUtil.SendMessageToClient("[Coords", "Your coordinates are x " + playerLocation.X + " y " + playerLocation.Y, 255, 255, 255);
+                ChatUtil.SendMessageToClient("[Coords", "Your coordinates are x " + playerLocation.X + " y " + playerLocation.Y + " z " + playerLocation.Z, 255, 255, 255);
             }), false);
 
             API.RegisterCommand("revive", new Action<int>(src =>
