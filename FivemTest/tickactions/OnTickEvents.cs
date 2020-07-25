@@ -22,8 +22,8 @@ namespace FivemTest.tickactions
             {
                 var vehicle = Game.PlayerPed.CurrentVehicle;
 
-                if (vehicle.IsInAir && VehicleClass.Helicopters != vehicle.ClassType 
-                    && VehicleClass.Planes != vehicle.ClassType && VehicleClass.Cycles != vehicle.ClassType)
+                if (vehicle.IsInAir && !VehicleClass.Helicopters.Equals(vehicle.ClassType) 
+                    && !VehicleClass.Planes.Equals(vehicle.ClassType) && !VehicleClass.Cycles.Equals(vehicle.ClassType))
                 {
                     API.DisableControlAction(0, 59, true);
                     API.DisableControlAction(0, 60, true);
