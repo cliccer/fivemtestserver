@@ -50,8 +50,10 @@
     <Compile Include="chatcommands\VehicleCommands.cs" />
     <Compile Include="FivemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tickactions\OnTickEvents.cs" />
     <Compile Include="utils\ChatUtil.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /d "$(TargetPath)" "C:\FiveM\FXServer-Data\resources\fivemtestserver\"</PostBuildEvent>

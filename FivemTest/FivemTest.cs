@@ -1,22 +1,36 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FivemTest.chatcommands;
+using FivemTest.tickactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace FivemTest
 {
     public class FivemTest : BaseScript
     {
 
+        private bool firstTick = false;
         public FivemTest()
         {
-            InitStartUpSettings();
-            ChatCommandsMain.InitAllChatCommands();
+            Tick += OnTick;
         }
 
-        
+        public async Task OnTick()
+        {
+            if(!firstTick)
+            {
+                firstTick = true;
+                InitStartUpSettings();
+                ChatCommandsMain.InitAllChatCommands();
+            }
+
+            OnTickEvents.Execute();
+            
+        }
 
         private void InitStartUpSettings()
         {            
