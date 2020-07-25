@@ -44,8 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="chatcommands\ChatCommandsMain.cs" />
+    <Compile Include="chatcommands\WorldCommands.cs" />
+    <Compile Include="chatcommands\PlayerPedCommands.cs" />
+    <Compile Include="chatcommands\VehicleCommands.cs" />
     <Compile Include="FivemTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="utils\ChatUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
