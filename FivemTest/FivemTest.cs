@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FivemTest.chatcommands;
+using FivemTest.menus;
 using FivemTest.tickactions;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace FivemTest
                 firstTick = true;
                 InitStartUpSettings();
                 ChatCommandsMain.InitAllChatCommands();
+                MenuInitializer.InitMenu();
             }
 
             OnTickEvents.Execute();
@@ -37,6 +39,8 @@ namespace FivemTest
             //Disable AI cops
             API.SetCreateRandomCops(false);
             API.SetMaxWantedLevel(0);
+
+            
         }
     }
 
