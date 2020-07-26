@@ -55,6 +55,7 @@
     <Compile Include="chatcommands\PlayerCommands.cs" />
     <Compile Include="chatcommands\VehicleCommands.cs" />
     <Compile Include="FivemTest.cs" />
+    <Compile Include="menus\VehicleMenu.cs" />
     <Compile Include="menus\MenuInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="tickactions\OnTickEvents.cs" />

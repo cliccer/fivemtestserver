@@ -3,10 +3,6 @@ using CitizenFX.Core.Native;
 using FivemTest.chatcommands;
 using FivemTest.menus;
 using FivemTest.tickactions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace FivemTest
