@@ -40,10 +40,39 @@ namespace FivemTest.menus
                     vehicleMenu.AddMenuItem(vehicleMenuItem);
                 }
 
+                vehicleMenu.OnIndexChange += async (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
+                {
+                    Vehicle oldVeh = Game.PlayerPed.CurrentVehicle;
+                    if (oldVeh != null)
+                    {
+                        oldVeh.Delete();
+                    }
+
+                    Model model = new Model(_newItem.ItemData);
+                    Vehicle newVeh = await World.CreateVehicle(model, Game.PlayerPed.Position, 0f);
+                    Game.PlayerPed.SetIntoVehicle(newVeh, VehicleSeat.Driver);
+                };
+
                 vehicleMenu.OnItemSelect += (_menu, _item, _index) =>
                 {
-                    VehicleUtil.SpawnVehicle(_item.ItemData);
+                    Vehicle veh = Game.PlayerPed.CurrentVehicle;
+                    veh.Mods.InstallModKit();
+                    veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
+                    veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
+                    veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
+
+                    veh.Mods[VehicleToggleModType.Turbo].IsInstalled = true;
+                    veh.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = true;
                     MenuController.CloseAllMenus();
+                };
+
+                vehicleMenu.OnMenuClose += (_menu) =>
+                {
+                    Vehicle oldVeh = Game.PlayerPed.CurrentVehicle;
+                    if (oldVeh != null && !oldVeh.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled)
+                    {
+                        oldVeh.Delete();
+                    }
                 };
 
 
