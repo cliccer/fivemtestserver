@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 
 namespace FivemTest.utils
 {
@@ -69,6 +70,34 @@ namespace FivemTest.utils
                     //Debug.WriteLine("Added " + vehicleHash.ToString() + " to new list of " + vehClass.ToString());
                 }
             }
+        }
+
+        public static void SetColorOnVehicle(string colorType, VehicleColor color)
+        {
+            if ("Primary".Equals(colorType))
+            {
+                Game.PlayerPed.CurrentVehicle.Mods.PrimaryColor = color;
+            }
+            else if ("Secondary".Equals(colorType))
+            {
+                Game.PlayerPed.CurrentVehicle.Mods.SecondaryColor = color;
+            }
+            else if ("Pearlescent".Equals(colorType))
+            {
+                Game.PlayerPed.CurrentVehicle.Mods.PearlescentColor = color;
+            }
+            else if ("Rim".Equals(colorType))
+            {
+                Game.PlayerPed.CurrentVehicle.Mods.RimColor = color;
+            }
+            //else if ("Neon".Equals(colorType))
+            //{
+            //    Game.PlayerPed.CurrentVehicle.Mods.NeonLightsColor = color;
+            //}
+            //else if ("Tire smoke".Equals(colorType))
+            //{
+            //    Game.PlayerPed.CurrentVehicle.Mods.TireSmokeColor = color;
+            //}
         }
     }
 }

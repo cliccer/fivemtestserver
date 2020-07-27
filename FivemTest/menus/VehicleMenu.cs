@@ -1,8 +1,11 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.NaturalMotion;
 using FivemTest.utils;
 using MenuAPI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace FivemTest.menus
 {
@@ -49,7 +52,15 @@ namespace FivemTest.menus
                     }
 
                     Model model = new Model(_newItem.ItemData);
-                    Vehicle newVeh = await World.CreateVehicle(model, Game.PlayerPed.Position, 0f);
+                    Vector3 position;
+                    if (Game.PlayerPed.IsInVehicle())
+                    {
+                        position = Game.PlayerPed.CurrentVehicle.Position;
+                    } else
+                    {
+                        position = Game.PlayerPed.Position;
+                    }
+                    Vehicle newVeh = await World.CreateVehicle(model, position, Game.PlayerPed.Heading);
                     Game.PlayerPed.SetIntoVehicle(newVeh, VehicleSeat.Driver);
                 };
 
@@ -114,7 +125,41 @@ namespace FivemTest.menus
             }
             veh.Mods.InstallModKit();
 
-            //TODO Add VehicleModTypeToggle here
+            //TODO Add VehicleModTypeToggle
+
+            Menu colorMenu = new Menu("Color", "Vehicle colors");
+
+            MenuItem colorMenuItem = new MenuItem("Color", "Vehicle colors")
+            {
+                Label = "→"
+            };
+            modVehMenu.AddMenuItem(colorMenuItem);
+
+            MenuController.AddSubmenu(modVehMenu, colorMenu);
+            MenuController.BindMenuItem(modVehMenu, colorMenu, colorMenuItem);
+
+            ArrayList colorTypes = new ArrayList { "Primary", "Secondary", "Pearlescent", "Rim"};
+
+            foreach (string colorType in colorTypes)
+            {
+                Menu colorTypeMenu = new Menu(colorType + " color");
+                ArrayList dataList = new ArrayList();
+                dataList.Add(colorType);
+                dataList.Add(colorTypeMenu);
+
+                MenuItem colorTypeMenuItem = new MenuItem(colorType + " color") 
+                { 
+                    ItemData = dataList
+                };
+
+                colorMenu.AddMenuItem(colorTypeMenuItem);
+                MenuController.AddSubmenu(colorMenu, colorTypeMenu);
+                MenuController.BindMenuItem(colorMenu, colorTypeMenu, colorTypeMenuItem);
+            }
+            colorMenu.OnItemSelect += (_menu, _item, _index) =>
+            {
+                AddColorItems(_item.ItemData[1], _item.ItemData[0]);
+            };
 
             foreach (VehicleMod mod in veh.Mods.GetAllMods())
             {
@@ -140,9 +185,13 @@ namespace FivemTest.menus
             }
             modVehMenu.OnItemSelect += (_menu, _item, _index) =>
             {
+                if(_item.ItemData != null)
+                {
+
                 Menu temp = _item.ItemData[1];
                 temp.ClearMenuItems();
                 CreateModTypeMenu(_item.ItemData[1], _item.ItemData[0], veh);
+                }
             };
         }
 
@@ -195,6 +244,65 @@ namespace FivemTest.menus
                 }
                 _item.RightIcon = MenuItem.Icon.TICK;
                 veh.Mods[modType].Index = _item.ItemData;
+            };
+        }
+
+        private static void AddColorItems(Menu colorTypeMenu, String colorType)
+        {
+            Vehicle veh = Game.PlayerPed.CurrentVehicle;
+
+            //TODO Fix ordering of colors
+            foreach (VehicleColor vehC in Enum.GetValues(typeof(VehicleColor)))
+            {
+                ArrayList dataList = new ArrayList();
+                dataList.Add(vehC);
+                dataList.Add(colorType);
+
+                MenuItem colorMenuItem = new MenuItem(vehC.ToString())
+                {
+                    ItemData = dataList
+                };
+                if(("Primary".Equals(colorType) && vehC.Equals(veh.Mods.PrimaryColor)) 
+                    || ("Secondary".Equals(colorType) && vehC.Equals(veh.Mods.SecondaryColor))
+                    || ("Pearlescent".Equals(colorType) && vehC.Equals(veh.Mods.PearlescentColor))
+                    || ("Rim".Equals(colorType) && vehC.Equals(veh.Mods.RimColor))
+                    || ("Neon".Equals(colorType) && vehC.Equals(veh.Mods.NeonLightsColor))
+                    || ("Tire smoke".Equals(colorType) && vehC.Equals(veh.Mods.TireSmokeColor))){
+                    colorMenuItem.RightIcon = MenuItem.Icon.TICK;
+                }
+                colorTypeMenu.AddMenuItem(colorMenuItem);
+            }
+
+            colorTypeMenu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
+            {
+                VehicleUtil.SetColorOnVehicle(_newItem.ItemData[1], _newItem.ItemData[0]);
+
+            };
+
+            colorTypeMenu.OnItemSelect += (_menu, _item, _index) =>
+            {
+                foreach(MenuItem menuItem in _menu.GetMenuItems())
+                {
+                    if (menuItem.RightIcon.Equals(MenuItem.Icon.TICK))
+                    {
+                        menuItem.RightIcon = MenuItem.Icon.NONE;
+                        break;
+                    }
+                }
+                _item.RightIcon = MenuItem.Icon.TICK;
+            };
+
+            colorTypeMenu.OnMenuClose += (_menu) =>
+            {
+                foreach (MenuItem menuItem in _menu.GetMenuItems())
+                {
+                    if (menuItem.RightIcon.Equals(MenuItem.Icon.TICK))
+                    {
+                        VehicleUtil.SetColorOnVehicle(menuItem.ItemData[1], menuItem.ItemData[0]);
+                        break;
+                    }
+                }
+
             };
         }
     }
