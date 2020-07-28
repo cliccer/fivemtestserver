@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Security.Cryptography;
 
 namespace FivemTest.menus
 {
@@ -252,8 +254,15 @@ namespace FivemTest.menus
             Vehicle veh = Game.PlayerPed.CurrentVehicle;
 
             //TODO Fix ordering of colors
-            foreach (VehicleColor vehC in Enum.GetValues(typeof(VehicleColor)))
+
+            Array vehicleColors = Enum.GetValues(typeof(VehicleColor));
+
+            string[] vehicleColors2 = vehicleColors.OfType<object>().Select(o => o.ToString()).ToArray();
+
+            Array.Sort<string>(vehicleColors2);
+            foreach (string vehCS in vehicleColors2)
             {
+                Enum.TryParse<VehicleColor>(vehCS, out VehicleColor vehC);
                 ArrayList dataList = new ArrayList();
                 dataList.Add(vehC);
                 dataList.Add(colorType);
@@ -272,6 +281,7 @@ namespace FivemTest.menus
                 }
                 colorTypeMenu.AddMenuItem(colorMenuItem);
             }
+
 
             colorTypeMenu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
             {
