@@ -68,6 +68,7 @@ namespace FivemTest.menus
 
                 vehicleMenu.OnItemSelect += (_menu, _item, _index) =>
                 {
+                    
                     Vehicle veh = Game.PlayerPed.CurrentVehicle;
                     veh.Mods.InstallModKit();
                     veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
@@ -127,41 +128,9 @@ namespace FivemTest.menus
             }
             veh.Mods.InstallModKit();
 
-            //TODO Add VehicleModTypeToggle
 
-            Menu colorMenu = new Menu("Color", "Vehicle colors");
-
-            MenuItem colorMenuItem = new MenuItem("Color", "Vehicle colors")
-            {
-                Label = "→"
-            };
-            modVehMenu.AddMenuItem(colorMenuItem);
-
-            MenuController.AddSubmenu(modVehMenu, colorMenu);
-            MenuController.BindMenuItem(modVehMenu, colorMenu, colorMenuItem);
-
-            ArrayList colorTypes = new ArrayList { "Primary", "Secondary", "Pearlescent", "Rim"};
-
-            foreach (string colorType in colorTypes)
-            {
-                Menu colorTypeMenu = new Menu(colorType + " color");
-                ArrayList dataList = new ArrayList();
-                dataList.Add(colorType);
-                dataList.Add(colorTypeMenu);
-
-                MenuItem colorTypeMenuItem = new MenuItem(colorType + " color") 
-                { 
-                    ItemData = dataList
-                };
-
-                colorMenu.AddMenuItem(colorTypeMenuItem);
-                MenuController.AddSubmenu(colorMenu, colorTypeMenu);
-                MenuController.BindMenuItem(colorMenu, colorTypeMenu, colorTypeMenuItem);
-            }
-            colorMenu.OnItemSelect += (_menu, _item, _index) =>
-            {
-                AddColorItems(_item.ItemData[1], _item.ItemData[0]);
-            };
+            AddColorMenu(modVehMenu);
+            AddToggleModsMenu(modVehMenu);
 
             foreach (VehicleMod mod in veh.Mods.GetAllMods())
             {
@@ -193,6 +162,57 @@ namespace FivemTest.menus
                 Menu temp = _item.ItemData[1];
                 temp.ClearMenuItems();
                 CreateModTypeMenu(_item.ItemData[1], _item.ItemData[0], veh);
+                }
+            };
+        }
+
+        private static void AddToggleModsMenu(Menu modVehMenu)
+        {
+            Vehicle veh = Game.PlayerPed.CurrentVehicle;
+            Menu vehModToggleMenu = new Menu("Toggleable mods");
+
+            MenuItem vehModToggleMenuItem = new MenuItem("Toggles", "Toggleable mods")
+            {
+                Label = "→"
+            };
+
+            modVehMenu.AddMenuItem(vehModToggleMenuItem);
+            MenuController.AddSubmenu(modVehMenu, vehModToggleMenu);
+            MenuController.BindMenuItem(modVehMenu, vehModToggleMenu, vehModToggleMenuItem);
+
+            foreach (VehicleToggleModType modToggle in Enum.GetValues(typeof(VehicleToggleModType)))
+            {
+
+                MenuItem menuItem = new MenuItem(modToggle.ToString())
+                {
+                    ItemData = modToggle
+                };
+
+                vehModToggleMenu.AddMenuItem(menuItem);
+            }
+
+            vehModToggleMenu.OnMenuOpen += (_menu) =>
+            {
+                foreach (MenuItem menuItem in _menu.GetMenuItems())
+                {
+                    if (veh.Mods[menuItem.ItemData].IsInstalled)
+                    {
+                        menuItem.RightIcon = MenuItem.Icon.TICK;
+                    }
+                }
+            };
+
+            vehModToggleMenu.OnItemSelect += (_menu, _item, _index) =>
+            {
+                if (_item.RightIcon.Equals(MenuItem.Icon.TICK))
+                {
+                    veh.Mods[(VehicleToggleModType)_item.ItemData].IsInstalled = false;
+                    _item.RightIcon = MenuItem.Icon.NONE;
+                }
+                else
+                {
+                    veh.Mods[(VehicleToggleModType)_item.ItemData].IsInstalled = true;
+                    _item.RightIcon = MenuItem.Icon.TICK;
                 }
             };
         }
@@ -249,11 +269,46 @@ namespace FivemTest.menus
             };
         }
 
+        private static void AddColorMenu(Menu modVehMenu)
+        {
+            Menu colorMenu = new Menu("Color", "Vehicle colors");
+
+            MenuItem colorMenuItem = new MenuItem("Color", "Vehicle colors")
+            {
+                Label = "→"
+            };
+            modVehMenu.AddMenuItem(colorMenuItem);
+
+            MenuController.AddSubmenu(modVehMenu, colorMenu);
+            MenuController.BindMenuItem(modVehMenu, colorMenu, colorMenuItem);
+
+            ArrayList colorTypes = new ArrayList { "Primary", "Secondary", "Pearlescent", "Rim" };
+
+            foreach (string colorType in colorTypes)
+            {
+                Menu colorTypeMenu = new Menu(colorType + " color");
+                ArrayList dataList = new ArrayList();
+                dataList.Add(colorType);
+                dataList.Add(colorTypeMenu);
+
+                MenuItem colorTypeMenuItem = new MenuItem(colorType + " color")
+                {
+                    ItemData = dataList
+                };
+
+                colorMenu.AddMenuItem(colorTypeMenuItem);
+                MenuController.AddSubmenu(colorMenu, colorTypeMenu);
+                MenuController.BindMenuItem(colorMenu, colorTypeMenu, colorTypeMenuItem);
+            }
+            colorMenu.OnItemSelect += (_menu, _item, _index) =>
+            {
+                AddColorItems(_item.ItemData[1], _item.ItemData[0]);
+            };
+        }
+
         private static void AddColorItems(Menu colorTypeMenu, String colorType)
         {
             Vehicle veh = Game.PlayerPed.CurrentVehicle;
-
-            //TODO Fix ordering of colors
 
             Array vehicleColors = Enum.GetValues(typeof(VehicleColor));
 
