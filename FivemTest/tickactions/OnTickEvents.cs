@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using FivemTest.entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace FivemTest.tickactions
         public static void Execute()
         {
             DisableVehicleAirControl();
+            DisableVehicleSeatAutoShuffle();
         }
 
         private static void DisableVehicleAirControl()
@@ -32,6 +34,19 @@ namespace FivemTest.tickactions
                     API.DisableControlAction(0, 63, true);
                 }
                 
+            }
+        }
+
+        private static void DisableVehicleSeatAutoShuffle()
+        {
+            Ped ped = Game.PlayerPed;
+            if (ped.IsInVehicle())
+            {
+                Vehicle veh = ped.CurrentVehicle;
+                if (!PedValues.shuffleSeat && API.GetLastPedInVehicleSeat(veh.Handle, 0) == ped.Handle && API.GetIsTaskActive(ped.Handle, 165))
+                {
+                    API.SetPedIntoVehicle(ped.Handle, veh.Handle, 0);
+                }
             }
         }
     }

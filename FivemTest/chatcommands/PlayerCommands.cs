@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using FivemTest.actions;
 using FivemTest.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace FivemTest.chatcommands
 {
@@ -71,6 +73,17 @@ namespace FivemTest.chatcommands
                     Game.PlayerPed.Resurrect();
                 }
             }), false);
+
+            API.RegisterKeyMapping("shuffleSeat", "Shuffle", "keyboard", "o");
+
+            API.RegisterCommand("shuffleSeat", (new Action<int>(src =>
+            {
+                if(Game.PlayerPed.IsInVehicle() && API.GetPedInVehicleSeat(Game.PlayerPed.CurrentVehicle.Handle, 0) == Game.PlayerPed.Handle)
+                {
+                Thread thread = new Thread(PedActions.ShuffleSeatAction);
+                thread.Start();
+                }
+            })), false);
         }
 
     }

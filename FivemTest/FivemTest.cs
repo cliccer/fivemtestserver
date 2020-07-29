@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using FivemTest.actions;
 using FivemTest.chatcommands;
 using FivemTest.menus;
 using FivemTest.tickactions;
@@ -35,10 +36,6 @@ namespace FivemTest
             //Disable AI cops
             API.SetCreateRandomCops(false);
             API.SetMaxWantedLevel(0);
-
-
-            
-
             
         }
     }
