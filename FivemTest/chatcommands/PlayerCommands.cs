@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FivemTest.actions;
+using FivemTest.entities;
 using FivemTest.utils;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,8 @@ namespace FivemTest.chatcommands
 
             API.RegisterCommand("shuffleSeat", (new Action<int>(src =>
             {
-                if(Game.PlayerPed.IsInVehicle() && API.GetPedInVehicleSeat(Game.PlayerPed.CurrentVehicle.Handle, 0) == Game.PlayerPed.Handle)
+                if(Game.PlayerPed.IsInVehicle() && API.GetPedInVehicleSeat(Game.PlayerPed.CurrentVehicle.Handle, 0) == Game.PlayerPed.Handle
+                    && !PedValues.shuffleSeat)
                 {
                 Thread thread = new Thread(PedActions.ShuffleSeatAction);
                 thread.Start();
