@@ -18,6 +18,7 @@ namespace FivemTest.menus
             MenuController.AddMenu(menu);
                 VehicleMenu.SpawnVehicleMenu(menu);
                 VehicleMenu.ModVehicleMenu(menu);
+                PositionRestrictedMenu.InitMenuMRPDLockerRoom(menu);
             }), false); 
         }
 

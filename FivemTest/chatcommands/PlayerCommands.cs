@@ -48,9 +48,9 @@ namespace FivemTest.chatcommands
 
             API.RegisterCommand("tp", new Action<int, List<object>, string>((src, args, raw) =>
             {
-                var waypoint = API.GetFirstBlipInfoId(8);
+                int waypoint = API.GetFirstBlipInfoId(8);
 
-                var waypointCoords = API.GetBlipCoords(waypoint);
+                Vector3 waypointCoords = API.GetBlipCoords(waypoint);
 
                 float height = 10000f;
 
@@ -63,8 +63,16 @@ namespace FivemTest.chatcommands
 
             API.RegisterCommand("coords", new Action<int>(src =>
             {
-                var playerLocation = Game.PlayerPed.Position;
+                Vector3 playerLocation = Game.PlayerPed.Position;
                 ChatUtil.SendMessageToClient("[Coords", "Your coordinates are x " + playerLocation.X + " y " + playerLocation.Y + " z " + playerLocation.Z, 255, 255, 255);
+            }), false);
+
+            API.RegisterCommand("interior", new Action<int>(src =>
+            {
+                Vector3 playerLocation = Game.PlayerPed.Position;
+                int interiorId = API.GetInteriorAtCoords(playerLocation.X, playerLocation.Y, playerLocation.Z);
+
+                ChatUtil.SendMessageToClient("[Interior]", "Current playerposition interiorID = " + interiorId, 255, 255, 255);
             }), false);
 
             API.RegisterCommand("revive", new Action<int>(src =>
