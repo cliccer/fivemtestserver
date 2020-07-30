@@ -48,16 +48,14 @@ namespace FivemTest.menus
                 vehicleMenu.OnIndexChange += async (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
                 {
                     Vehicle oldVeh = Game.PlayerPed.CurrentVehicle;
-                    if (oldVeh != null)
-                    {
-                        oldVeh.Delete();
-                    }
-
                     Model model = new Model(_newItem.ItemData);
                     Vector3 position;
                     if (Game.PlayerPed.IsInVehicle())
                     {
                         position = Game.PlayerPed.CurrentVehicle.Position;
+                        
+                        oldVeh.Delete();
+                        
                     } else
                     {
                         position = Game.PlayerPed.Position;
