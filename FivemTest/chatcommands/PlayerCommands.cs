@@ -94,6 +94,29 @@ namespace FivemTest.chatcommands
                 thread.Start();
                 }
             })), false);
+
+            API.RegisterCommand("grab", (new Action<int>(src =>
+            {
+                Ped playerPed = Game.PlayerPed;
+                Vector3 playerPos = playerPed.Position;
+                Vector3 playerOffset = API.GetOffsetFromEntityGivenWorldCoords(src, 0, 1.3f, 0);
+                int rayHandle = API.StartShapeTestCapsule(playerPos.X, playerPos.Y, playerPos.Z, playerOffset.X, playerOffset.Y, playerOffset.Z, 1, 12, src, 7);
+                bool hit = false;
+                Vector3 endPoint = playerPos;
+                Vector3 surfaceNormal = playerPos;
+                int ped = 0;
+                API.GetShapeTestResult(rayHandle, ref hit, ref endPoint, ref surfaceNormal, ref ped);
+                Debug.WriteLine(src.ToString());
+                if (ped != 0)
+                {
+                    Debug.WriteLine("Found " + ped);
+                    API.AttachEntityToEntity(ped, playerPed.Handle, 0, playerPos.X, playerPos.Y, playerPos.Z, 0f, 0f, 0f, true, false, false, false, 0, true);
+                } else
+                {
+                    Debug.WriteLine("shit");
+                }
+
+            })),false);
         }
 
     }
