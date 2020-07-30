@@ -83,7 +83,7 @@ namespace FivemTest.chatcommands
                 }
             }), false);
 
-            API.RegisterKeyMapping("shuffleSeat", "Shuffle", "keyboard", "o");
+            API.RegisterKeyMapping("shuffleSeat", "Shuffle", "keyboard", "h");
 
             API.RegisterCommand("shuffleSeat", (new Action<int>(src =>
             {

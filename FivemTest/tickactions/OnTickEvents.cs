@@ -39,11 +39,12 @@ namespace FivemTest.tickactions
 
         private static void DisableVehicleSeatAutoShuffle()
         {
+
             Ped ped = Game.PlayerPed;
-            if (ped.IsInVehicle())
+            if (ped.IsInVehicle() && !PedValues.shuffleSeat)
             {
                 Vehicle veh = ped.CurrentVehicle;
-                if (!PedValues.shuffleSeat && API.GetLastPedInVehicleSeat(veh.Handle, 0) == ped.Handle && API.GetIsTaskActive(ped.Handle, 165))
+                if (API.GetLastPedInVehicleSeat(veh.Handle, 0) == ped.Handle && API.GetIsTaskActive(ped.Handle, 165))
                 {
                     API.SetPedIntoVehicle(ped.Handle, veh.Handle, 0);
                 }
