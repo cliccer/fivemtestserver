@@ -32,7 +32,6 @@ namespace FivemTest.hud
             float posY = 0.77f;
             float speed = API.GetEntitySpeed(Game.PlayerPed.Handle) * 2.236936f;
 
-            //drawTxt(timeText, 4, locationColorText, 0.4, screenPosX, screenPosY + 0.048)
             API.SetTextFont(4);
             API.SetTextScale(0.5f, 0.5f);
             API.SetTextColour(255, 255, 255, 255);
