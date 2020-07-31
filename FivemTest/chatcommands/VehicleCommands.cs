@@ -30,27 +30,22 @@ namespace FivemTest.chatcommands
 
             API.RegisterCommand("impound", new Action<int>((src) =>
             {
-                Vector3 pos = Game.PlayerPed.Position;
-                int vehInt = API.GetClosestVehicle(pos.X, pos.Y, pos.Z, 3f, 0, 70);
-                Entity entity = Entity.FromHandle(vehInt);
-                if (entity == null)
-                {
-                    ChatUtil.SendMessageToClient("null ", "null", 255, 255, 255);
-                    
-                } else
-                {
-                    int number = API.GetVehicleNumberOfPassengers(vehInt);
-                    if(!API.IsVehicleSeatFree(vehInt, -1))
-                    {
-                        number++;
-                    }
-                    API.TaskEveryoneLeaveVehicle(vehInt);
-                    
-                    ChatUtil.SendMessageToClient("Closest ", entity.ToString() + ", " + number, 255, 255, 255);
+                Ped playerPed = Game.PlayerPed;
+                Vector3 playerPos = playerPed.Position;
+                Vector3 playerOffset = API.GetOffsetFromEntityGivenWorldCoords(playerPed.Handle, 0, 1f, 0);
+                int rayHandle = API.StartShapeTestCapsule(playerPos.X, playerPos.Y, playerPos.Z, playerOffset.X, playerOffset.Y, playerOffset.Z, 1, 10, playerPed.Handle, 7);
+                bool hit = false;
+                Vector3 endPoint = playerPos;
+                Vector3 surfaceNormal = playerPos;
+                int veh = 0;
+                API.GetShapeTestResult(rayHandle, ref hit, ref endPoint, ref surfaceNormal, ref veh);
 
-                    entity.Delete();
+                if(veh != 0)
+                {
+                    Vehicle vehicle = new Vehicle(veh);
+                    //TODO should probably check if vehicel has passengers
+                    vehicle.Delete();
                 }
-
             }
             ), false);
         }
