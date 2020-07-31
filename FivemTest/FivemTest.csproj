@@ -55,6 +55,7 @@
     <Compile Include="chatcommands\WorldCommands.cs" />
     <Compile Include="chatcommands\PlayerCommands.cs" />
     <Compile Include="chatcommands\VehicleCommands.cs" />
+    <Compile Include="enums\Emote.cs" />
     <Compile Include="entities\PedValues.cs" />
     <Compile Include="FivemTest.cs" />
     <Compile Include="menus\PositionRestrictedMenu.cs" />

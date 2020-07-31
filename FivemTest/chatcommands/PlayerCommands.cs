@@ -94,6 +94,36 @@ namespace FivemTest.chatcommands
                 thread.Start();
                 }
             })), false);
+
+            API.RegisterCommand("e", new Action<int, List<object>>((src, args) =>
+            {
+                List<string> argList = args.Select(o => o.ToString()).ToList();
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    ChatUtil.SendMessageToClient("[Error]", "You cannot perform an emote while in a vehicle.", 255, 255, 255);
+                    return;
+                } else
+                {
+                    string emote = Emote.Get(argList[0]);
+                    if (emote != null)
+                    {
+                        API.TaskStartScenarioInPlace(Game.PlayerPed.Handle, emote, 0, true);
+                    } else
+                    {
+                        ChatUtil.SendMessageToClient("[Error]", "Invalid emote specified", 255, 255, 255);
+                    }
+                }
+            }), false);
+
+            API.RegisterKeyMapping("cancelEmote", "Cancel emote", "keyboard", "space");
+
+            API.RegisterCommand("cancelEmote", new Action<int>(src =>
+            {
+                if (API.IsPedActiveInScenario(Game.PlayerPed.Handle))
+                {
+                    API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
+                }
+            }), false);
         }
 
     }
