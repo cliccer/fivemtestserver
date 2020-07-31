@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FivemTest.entities;
+using FivemTest.hud;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace FivemTest.tickactions
         {
             DisableVehicleAirControl();
             DisableVehicleSeatAutoShuffle();
+
+            VehicleHud.UpdateVehicleHud();
         }
 
         private static void DisableVehicleAirControl()

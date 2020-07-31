@@ -58,6 +58,7 @@
     <Compile Include="enums\Emote.cs" />
     <Compile Include="entities\PedValues.cs" />
     <Compile Include="FivemTest.cs" />
+    <Compile Include="hud\VehicleHud.cs" />
     <Compile Include="menus\PositionRestrictedMenu.cs" />
     <Compile Include="menus\VehicleMenu.cs" />
     <Compile Include="menus\MenuInitializer.cs" />
