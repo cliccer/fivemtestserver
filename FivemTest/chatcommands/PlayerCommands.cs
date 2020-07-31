@@ -95,6 +95,56 @@ namespace FivemTest.chatcommands
                 }
             })), false);
 
+            API.RegisterCommand("drag", (new Action<int, List<object>>((src, args) =>
+            {
+                List<string> argList = args.Select(o => o.ToString()).ToList();
+                if(argList.Any() && argList[0].Equals("reset"))
+                {
+                    Debug.WriteLine("Resetting drag");
+                    PedValues.attachedEntity = 0;
+                    return;
+                }
+                if (argList.Any() && argList[0].Equals("check"))
+                {
+                    Debug.WriteLine("attachedEntity = " + PedValues.attachedEntity);
+                    return;
+                }
+                if (argList.Any() && argList[0].Equals("pos"))
+                {
+                    Vector3 pos = API.GetEntityCoords(PedValues.attachedEntity, true);
+                    Debug.WriteLine("attachedEntityPosition = x " + pos.X + " y " + pos.Y + " z " + pos.Z);
+                    return;
+                }
+                Ped playerPed = Game.PlayerPed;
+                if (PedValues.attachedEntity != 0)
+                {
+                    Debug.WriteLine("Detaching entity " + PedValues.attachedEntity);
+                    API.DetachEntity(PedValues.attachedEntity, true, true);
+                    PedValues.attachedEntity = 0;
+                    return;
+                }
+                Vector3 playerPos = playerPed.Position;
+                Vector3 playerOffset = API.GetOffsetFromEntityGivenWorldCoords(playerPed.Handle, 0, 5f, 0);
+                int rayHandle = API.StartShapeTestCapsule(playerPos.X, playerPos.Y, playerPos.Z, playerOffset.X, playerOffset.Y, playerOffset.Z, 1, 12, playerPed.Handle, 7);
+                bool hit = false;
+                Vector3 endPoint = playerPos;
+                Vector3 surfaceNormal = playerPos;
+                int ped = 0;
+                API.GetShapeTestResult(rayHandle, ref hit, ref endPoint, ref surfaceNormal, ref ped);
+                
+                if (ped != 0)
+                {
+                    Debug.WriteLine("Would try to attach " + ped + " to " + playerPed.Handle);
+                    API.AttachEntityToEntity(ped, playerPed.Handle, 4103, 0, 1, 0, 0f, 0f, 0f, true, false, false, false, 2, true);
+                    PedValues.attachedEntity = ped;
+
+                } else
+                {
+                    Debug.WriteLine("shit");
+                }
+
+            })),false);
+
             API.RegisterCommand("e", new Action<int, List<object>>((src, args) =>
             {
                 List<string> argList = args.Select(o => o.ToString()).ToList();

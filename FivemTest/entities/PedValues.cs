@@ -9,6 +9,7 @@ namespace FivemTest.entities
     static class PedValues
     {
         public static bool shuffleSeat = false;
+        public static int attachedEntity = 0;
 
        
     }
