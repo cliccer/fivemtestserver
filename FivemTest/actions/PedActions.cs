@@ -15,8 +15,10 @@ namespace FivemTest.actions
         public static void ShuffleSeatAction()
         {
             PedValues.shuffleSeat = true;
+            Debug.WriteLine("shuffleSeat = true");
             Thread.Sleep(3000);
             PedValues.shuffleSeat = false;
+            Debug.WriteLine("shuffleSeat = false");
         }
     }
 }
