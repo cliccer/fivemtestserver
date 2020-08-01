@@ -48,6 +48,21 @@ namespace FivemTest.chatcommands
                 }
             }
             ), false);
+
+            API.RegisterCommand("engine", new Action<int>(src =>
+            {
+                Vehicle veh = Game.PlayerPed.CurrentVehicle;
+                if(veh != null)
+                {
+                    if (veh.IsEngineRunning)
+                    {
+                        API.SetVehicleEngineOn(veh.Handle, false, false, true);
+                    } else
+                    {
+                        API.SetVehicleEngineOn(veh.Handle, true, false, true);
+                    }
+                }
+            }), false);
         }
     }
 }

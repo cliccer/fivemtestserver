@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
 using System.Security.Policy;
@@ -35,6 +36,7 @@ namespace FivemTest.utils
 
 
             veh.Rotation = Game.PlayerPed.Rotation + new Vector3(0f, 0f, 90f);
+            API.SetVehicleEngineOn(veh.Handle, false, false, true);
             ChatUtil.SendMessageToClient("[VehicleSpawner]", "You spawned a " + vehicle.ToString(), 255, 255, 255);
         }
         

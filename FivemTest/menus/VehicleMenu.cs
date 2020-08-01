@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.NaturalMotion;
 using FivemTest.utils;
 using MenuAPI;
@@ -61,6 +62,7 @@ namespace FivemTest.menus
                         position = Game.PlayerPed.Position;
                     }
                     Vehicle newVeh = await World.CreateVehicle(model, position, Game.PlayerPed.Heading);
+                    API.SetVehicleEngineOn(newVeh.Handle, false, false, true);
                     Game.PlayerPed.SetIntoVehicle(newVeh, VehicleSeat.Driver);
                 };
 

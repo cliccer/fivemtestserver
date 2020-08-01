@@ -66,14 +66,15 @@ namespace FivemTest.tickactions
                 return;
             }
 
-            Vector3 playerPos = Game.PlayerPed.Position;
             if (API.IsControlJustPressed(1, 23))
             {
+                Vector3 playerPos = Game.PlayerPed.Position;
                 int veh = API.GetClosestVehicle(playerPos.X, playerPos.Y, playerPos.Z, 4f, 0, 70);
 
                 if (veh != 0)
                 {
                     Vehicle vehicle = new Vehicle(veh);
+                    API.SetVehicleEngineOn(veh, vehicle.IsEngineRunning, false, true);
                     if(!VehicleClass.Motorcycles.Equals(vehicle.ClassType) && !VehicleClass.Cycles.Equals(vehicle.ClassType))
                     {
                         int closestDoor = -1;
