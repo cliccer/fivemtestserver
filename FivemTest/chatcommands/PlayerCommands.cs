@@ -94,7 +94,7 @@ namespace FivemTest.chatcommands
                 {
                     PedValues.shuffleSeat = true;
                     Debug.WriteLine("shuffleSeat = true");
-                    await Delay(3000);
+                    await Delay(4000);
                     PedValues.shuffleSeat = false;
                     Debug.WriteLine("shuffleSeat = false");
                 }
@@ -192,7 +192,7 @@ namespace FivemTest.chatcommands
                 if (API.IsControlJustPressed(1, 23))
                 {
                     Vector3 playerPos = Game.PlayerPed.Position;
-                    int veh = API.GetClosestVehicle(playerPos.X, playerPos.Y, playerPos.Z, 4f, 0, 70);
+                    int veh = API.GetClosestVehicle(playerPos.X, playerPos.Y, playerPos.Z, 3f, 0, 70);
 
                     if (veh != 0)
                     {

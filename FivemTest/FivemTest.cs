@@ -44,9 +44,6 @@ namespace FivemTest
                 Exports["spawnmanager"].setAutoSpawn(false);
                 Exports["spawnmanager"].spawnPlayer();
             });
-            
-
-            
         }
     }
 

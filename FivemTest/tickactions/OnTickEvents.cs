@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FivemTest.tickactions
 {
-    class OnTickEvents
+    class OnTickEvents : BaseScript
     {
 
         public static void Execute()
@@ -19,6 +19,8 @@ namespace FivemTest.tickactions
             DisableVehicleAirControl();
             DisableVehicleSeatAutoShuffle();
             StopEnterVehicle();
+            KeepEngineRunning();
+            DisableAutoEngineStartInHeli();
 
             VehicleHud.UpdateVehicleHud();
         }
@@ -49,6 +51,10 @@ namespace FivemTest.tickactions
             if (ped.IsInVehicle() && !PedValues.shuffleSeat)
             {
                 Vehicle veh = ped.CurrentVehicle;
+                if (ped.IsInHeli && veh.GetPedOnSeat(VehicleSeat.RightFront) == ped && !API.GetIsTaskActive(ped.Handle, 164) && !API.GetIsTaskActive(ped.Handle, 2))
+                {
+                    API.SetPedIntoVehicle(ped.Handle, veh.Handle, 0);
+                }
                 if (API.GetLastPedInVehicleSeat(veh.Handle, 0) == ped.Handle && API.GetIsTaskActive(ped.Handle, 165))
                 {
                     API.SetPedIntoVehicle(ped.Handle, veh.Handle, 0);
@@ -69,6 +75,34 @@ namespace FivemTest.tickactions
                 {
                     API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
                 }
+            }
+        }
+
+        private static async void KeepEngineRunning()
+        {
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+                if(vehicle.IsEngineRunning)
+                {
+                    await Delay(1000);
+                    if(!Game.PlayerPed.IsInVehicle() && !vehicle.IsEngineRunning)
+                    {
+                        API.SetVehicleEngineOn(vehicle.Handle, true, true, true);
+                    }
+                    
+                }
+            }
+        }
+
+        private static void DisableAutoEngineStartInHeli()
+        {
+            if (Game.PlayerPed.IsInHeli && !Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+            {
+                API.DisableControlAction(25, 87, true);
+                API.DisableControlAction(25, 88, true);
+                API.DisableControlAction(25, 89, true);
+                API.DisableControlAction(25, 90, true);
             }
         }
     }
