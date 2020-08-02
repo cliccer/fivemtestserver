@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using System.Collections.Generic;
 
 namespace FivemTest.utils
@@ -13,6 +14,15 @@ namespace FivemTest.utils
                 ["args"] = new[] { title, message }
             };
             TriggerEvent("chat:addMessage", msg);
+        }
+
+        public static void RemoveAllChatSuggestions()
+        {
+            List<dynamic> cmds = API.GetRegisteredCommands();
+
+            foreach(dynamic cmd in cmds) {
+                TriggerEvent("chat:removeSuggestion", "/" + cmd.name);
+            }
         }
     }
 }

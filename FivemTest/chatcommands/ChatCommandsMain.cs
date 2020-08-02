@@ -1,5 +1,7 @@
 ﻿
 
+using FivemTest.utils;
+
 namespace FivemTest.chatcommands
 {
     static class ChatCommandsMain
@@ -9,6 +11,8 @@ namespace FivemTest.chatcommands
             PlayerCommands.InitPlayerPedCommands();
             VehicleCommands.InitVehicleCommands();
             WorldCommands.InitWorldCommands();
+
+            ChatUtil.RemoveAllChatSuggestions();
         }
     }
 }
