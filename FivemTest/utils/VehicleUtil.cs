@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Policy;
 
 namespace FivemTest.utils
@@ -100,6 +101,23 @@ namespace FivemTest.utils
             //{
             //    Game.PlayerPed.CurrentVehicle.Mods.TireSmokeColor = color;
             //}
+        }
+
+        public static int GetClosesVehicleDoor(int veh, Vector3 position)
+        {
+            int closestDoor = -1;
+            float closestDoorDist = 5f;
+            for (int i = 0; i < API.GetNumberOfVehicleDoors(veh); i++)
+            {
+                Vector3 doorPos = API.GetEntryPositionOfDoor(veh, i);
+                float dist = API.Vdist2(position.X, position.Y, position.Z, doorPos.X, doorPos.Y, doorPos.Z);
+                if (dist < closestDoorDist && !API.DoesEntityExist(API.GetPedInVehicleSeat(veh, i - 1)))
+                {
+                    closestDoor = i - 1;
+                    closestDoorDist = dist;
+                }
+            }
+            return closestDoor;
         }
     }
 }

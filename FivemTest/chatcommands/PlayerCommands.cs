@@ -175,6 +175,34 @@ namespace FivemTest.chatcommands
                     API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
                 }
             }), false);
+
+            API.RegisterKeyMapping("enterClosestVehicleDoor", "Enter the closest vehicle door", "keyboard", "f");
+
+            API.RegisterCommand("enterClosestVehicleDoor", new Action<int>(src =>
+            {
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    return;
+                }
+
+                if (API.IsControlJustPressed(1, 23))
+                {
+                    Vector3 playerPos = Game.PlayerPed.Position;
+                    int veh = API.GetClosestVehicle(playerPos.X, playerPos.Y, playerPos.Z, 4f, 0, 70);
+
+                    if (veh != 0)
+                    {
+                        Vehicle vehicle = new Vehicle(veh);
+                        API.SetVehicleEngineOn(veh, vehicle.IsEngineRunning, false, true);
+                        if (!VehicleClass.Motorcycles.Equals(vehicle.ClassType) && !VehicleClass.Cycles.Equals(vehicle.ClassType))
+                        {
+                            int closestDoor = VehicleUtil.GetClosesVehicleDoor(veh, playerPos);
+                            API.TaskEnterVehicle(Game.PlayerPed.Handle, veh, 10000, closestDoor, 2.0f, 1, 0);
+                        }
+
+                    }
+                }
+            }), false);
         }
 
     }

@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using FivemTest.entities;
 using FivemTest.hud;
+using FivemTest.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace FivemTest.tickactions
         {
             DisableVehicleAirControl();
             DisableVehicleSeatAutoShuffle();
-            EnterVehicleClosestDoor();
+            StopEnterVehicle();
 
             VehicleHud.UpdateVehicleHud();
         }
@@ -58,43 +59,17 @@ namespace FivemTest.tickactions
             }
         }
 
-        private static void EnterVehicleClosestDoor()
+        private static void StopEnterVehicle()
         {
 
-            if(Game.PlayerPed.IsInVehicle())
+            if(API.IsControlJustReleased(0, 33) || API.IsControlJustReleased(0, 35)
+                || API.IsControlJustReleased(0, 32) || API.IsControlJustReleased(0, 34))
             {
-                return;
-            }
-
-            if (API.IsControlJustPressed(1, 23))
-            {
-                Vector3 playerPos = Game.PlayerPed.Position;
-                int veh = API.GetClosestVehicle(playerPos.X, playerPos.Y, playerPos.Z, 4f, 0, 70);
-
-                if (veh != 0)
+                if (API.GetIsTaskActive(Game.PlayerPed.Handle, 162))
                 {
-                    Vehicle vehicle = new Vehicle(veh);
-                    API.SetVehicleEngineOn(veh, vehicle.IsEngineRunning, false, true);
-                    if(!VehicleClass.Motorcycles.Equals(vehicle.ClassType) && !VehicleClass.Cycles.Equals(vehicle.ClassType))
-                    {
-                        int closestDoor = -1;
-                        float closestDoorDist = 5f;
-                        for(int i = 0; i < API.GetNumberOfVehicleDoors(veh); i++)
-                        {
-                            Vector3 doorPos = API.GetEntryPositionOfDoor(veh, i);
-                            float dist = API.Vdist2(playerPos.X, playerPos.Y, playerPos.Z, doorPos.X, doorPos.Y, doorPos.Z);
-                            if (dist < closestDoorDist && !API.DoesEntityExist(API.GetPedInVehicleSeat(veh, i - 1)))
-                            {
-                                closestDoor = i - 1;
-                                closestDoorDist = dist;
-                            }
-                        }
-                        API.TaskEnterVehicle(Game.PlayerPed.Handle, veh, 10000, closestDoor, 2.0f, 1, 0);
-                    }
-
+                    API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
                 }
             }
-
         }
     }
 }
