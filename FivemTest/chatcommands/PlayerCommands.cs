@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FivemTest.chatcommands
 {
@@ -85,14 +86,17 @@ namespace FivemTest.chatcommands
 
             API.RegisterKeyMapping("shuffleSeat", "Shuffle", "keyboard", "h");
 
-            API.RegisterCommand("shuffleSeat", (new Action<int>(src =>
+            API.RegisterCommand("shuffleSeat", (new Action<int>(async src =>
             {
                 if(Game.PlayerPed.IsInVehicle() 
                     && (API.GetPedInVehicleSeat(Game.PlayerPed.CurrentVehicle.Handle, 0) ==  Game.PlayerPed.Handle || API.GetPedInVehicleSeat(Game.PlayerPed.CurrentVehicle.Handle, 1) == Game.PlayerPed.Handle)
                     && !PedValues.shuffleSeat)
                 {
-                Thread thread = new Thread(PedActions.ShuffleSeatAction);
-                thread.Start();
+                    PedValues.shuffleSeat = true;
+                    Debug.WriteLine("shuffleSeat = true");
+                    await Delay(3000);
+                    PedValues.shuffleSeat = false;
+                    Debug.WriteLine("shuffleSeat = false");
                 }
             })), false);
 
@@ -136,7 +140,7 @@ namespace FivemTest.chatcommands
                 if (ped != 0)
                 {
                     Debug.WriteLine("Would try to attach " + ped + " to " + playerPed.Handle);
-                    API.AttachEntityToEntity(ped, playerPed.Handle, 4103, 0, 1, 0, 0f, 0f, 0f, true, false, false, false, 2, true);
+                    API.AttachEntityToEntity(ped, playerPed.Handle, 4103, 0, 0.7f, 0, 0f, 0f, 0f, true, false, false, false, 2, true);
                     PedValues.attachedEntity = ped;
 
                 } else
@@ -196,10 +200,53 @@ namespace FivemTest.chatcommands
                         API.SetVehicleEngineOn(veh, vehicle.IsEngineRunning, false, true);
                         if (!VehicleClass.Motorcycles.Equals(vehicle.ClassType) && !VehicleClass.Cycles.Equals(vehicle.ClassType))
                         {
-                            int closestDoor = VehicleUtil.GetClosesVehicleDoor(veh, playerPos);
+                            int closestDoor = VehicleUtil.GetClosestVehicleDoor(veh, playerPos);
                             API.TaskEnterVehicle(Game.PlayerPed.Handle, veh, 10000, closestDoor, 2.0f, 1, 0);
                         }
 
+                    }
+                }
+            }), false);
+
+            API.RegisterCommand("piv", new Action<int>(async src =>
+            {
+                
+                Vector3 playerPos = Game.PlayerPed.Position;
+                int veh = API.GetClosestVehicle(playerPos.X, playerPos.Y, playerPos.Z, 2.5f, 0, 70);
+                if(veh != 0)
+                {
+                    Vehicle vehicle = new Vehicle(veh);
+                    if(!VehicleClass.Motorcycles.Equals(vehicle.ClassType) && !VehicleClass.Cycles.Equals(vehicle.ClassType))
+                    {
+                        int closestSeat = VehicleUtil.GetClosestVehicleDoor(veh, playerPos);
+                        int closestDoor = closestSeat + 1;
+                        int ped = API.GetPedInVehicleSeat(veh, closestSeat);
+
+                        if(PedValues.attachedEntity == 0)
+                        {
+                            if(ped == 0)
+                            {
+                                return;
+                            }
+                            API.TaskLeaveVehicle(ped, veh, 16);
+                            await Delay(200);
+                            API.AttachEntityToEntity(ped, Game.PlayerPed.Handle, 4103, 0, 0.7f, 0, 0f, 0f, 0f, true, false, false, false, 2, true);
+                            PedValues.attachedEntity = ped;
+                        } else 
+                        {
+                            if(ped != 0)
+                            {
+                                return;
+                            }
+                            vehicle.Doors[VehicleUtil.GetVehicleDoorIndexFromSeatIndex(closestDoor)].Open();
+                            await Delay(200);
+                            API.DetachEntity(PedValues.attachedEntity, true, true);
+                            API.SetPedIntoVehicle(PedValues.attachedEntity, veh, closestSeat);
+                            PedValues.attachedEntity = 0;
+                        }
+
+                        await Delay(500);
+                        vehicle.Doors[VehicleUtil.GetVehicleDoorIndexFromSeatIndex(closestDoor)].Close();
                     }
                 }
             }), false);

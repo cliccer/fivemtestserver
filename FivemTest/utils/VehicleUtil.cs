@@ -103,7 +103,7 @@ namespace FivemTest.utils
             //}
         }
 
-        public static int GetClosesVehicleDoor(int veh, Vector3 position)
+        public static int GetClosestVehicleDoor(int veh, Vector3 position)
         {
             int closestDoor = -1;
             float closestDoorDist = 5f;
@@ -111,13 +111,34 @@ namespace FivemTest.utils
             {
                 Vector3 doorPos = API.GetEntryPositionOfDoor(veh, i);
                 float dist = API.Vdist2(position.X, position.Y, position.Z, doorPos.X, doorPos.Y, doorPos.Z);
-                if (dist < closestDoorDist && !API.DoesEntityExist(API.GetPedInVehicleSeat(veh, i - 1)))
+                if (dist < closestDoorDist)
                 {
                     closestDoor = i - 1;
                     closestDoorDist = dist;
                 }
             }
             return closestDoor;
+        }
+
+        public static VehicleDoorIndex GetVehicleDoorIndexFromSeatIndex(int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return VehicleDoorIndex.FrontLeftDoor;
+                case 1:
+                    return VehicleDoorIndex.FrontRightDoor;
+                case 2:
+                    return VehicleDoorIndex.BackLeftDoor;
+                case 3:
+                    return VehicleDoorIndex.BackRightDoor;
+                case 4:
+                    return VehicleDoorIndex.Hood;
+                case 5:
+                    return VehicleDoorIndex.Trunk;
+                default:
+                    return VehicleDoorIndex.FrontLeftDoor;
+            }
         }
     }
 }
