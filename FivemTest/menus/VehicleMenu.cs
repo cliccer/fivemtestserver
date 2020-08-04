@@ -50,6 +50,7 @@ namespace FivemTest.menus
                 {
                     Vehicle oldVeh = Game.PlayerPed.CurrentVehicle;
                     Model model = new Model(_newItem.ItemData);
+                    
                     Vector3 position;
                     if (Game.PlayerPed.IsInVehicle())
                     {
@@ -61,9 +62,11 @@ namespace FivemTest.menus
                     {
                         position = Game.PlayerPed.Position;
                     }
+                    
                     Vehicle newVeh = await World.CreateVehicle(model, position, Game.PlayerPed.Heading);
-                    API.SetVehicleEngineOn(newVeh.Handle, false, false, true);
+                    API.SetVehicleEngineOn(newVeh.Handle, true, false, true);
                     Game.PlayerPed.SetIntoVehicle(newVeh, VehicleSeat.Driver);
+                    
                 };
 
                 vehicleMenu.OnItemSelect += (_menu, _item, _index) =>

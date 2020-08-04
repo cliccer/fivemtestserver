@@ -80,10 +80,10 @@ namespace FivemTest.tickactions
 
         private static async void KeepEngineRunning()
         {
-            if (Game.PlayerPed.IsInVehicle())
+            if (Game.PlayerPed.IsInVehicle() )
             {
                 Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
-                if(vehicle.IsEngineRunning)
+                if(vehicle.GetPedOnSeat(VehicleSeat.Driver) == Game.PlayerPed && vehicle.IsEngineRunning)
                 {
                     await Delay(1000);
                     if(!Game.PlayerPed.IsInVehicle() && !vehicle.IsEngineRunning)

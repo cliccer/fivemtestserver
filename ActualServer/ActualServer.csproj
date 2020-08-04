@@ -4,18 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E65757C1-C47C-4DAD-977E-B5AA5AEB0EB8}</ProjectGuid>
+    <ProjectGuid>{9DB9622A-D0AB-47C4-9822-153896D3FCB5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FivemTest</RootNamespace>
-    <AssemblyName>FivemTest.net</AssemblyName>
+    <RootNamespace>ActualServer</RootNamespace>
+    <AssemblyName>ActualServer.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -31,13 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core">
-      <HintPath>..\..\..\..\AppData\Local\FiveM\FiveM.app\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
-    <Reference Include="MenuAPI">
-      <HintPath>..\..\Libs\MenuAPI.dll</HintPath>
+    <Reference Include="CitizenFX.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\CitizenFX.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,25 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="actions\PedActions.cs" />
-    <Compile Include="chatcommands\ChatCommandsMain.cs" />
-    <Compile Include="chatcommands\WorldCommands.cs" />
-    <Compile Include="chatcommands\PlayerCommands.cs" />
-    <Compile Include="chatcommands\VehicleCommands.cs" />
-    <Compile Include="enums\Emote.cs" />
-    <Compile Include="entities\PedValues.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="hud\VehicleHud.cs" />
-    <Compile Include="menus\PositionRestrictedMenu.cs" />
-    <Compile Include="menus\VehicleMenu.cs" />
-    <Compile Include="menus\MenuInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="tickactions\OnTickEvents.cs" />
-    <Compile Include="utils\ChatUtil.cs" />
-    <Compile Include="utils\VehicleUtil.cs" />
+    <Compile Include="serverevents\ServerEvents.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="eventhandlers\" />
+    <Folder Include="dao\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace FivemTest
 {
-    public class FivemTest : BaseScript
+    public class Main : BaseScript
     {
 
         private bool firstTick = false;
-        public FivemTest()
+        public Main()
         {
             Tick += OnTick;
         }
@@ -44,6 +44,8 @@ namespace FivemTest
                 Exports["spawnmanager"].setAutoSpawn(false);
                 Exports["spawnmanager"].spawnPlayer();
             });
+
+            API.NetworkSetFriendlyFireOption(true);
         }
     }
 

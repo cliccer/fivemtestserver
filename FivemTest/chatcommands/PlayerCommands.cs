@@ -13,6 +13,14 @@ namespace FivemTest.chatcommands
 {
     public class PlayerCommands : BaseScript
     {
+
+        public PlayerCommands()
+        {
+            API.RegisterCommand("respawn", new Action<int>(src =>
+            {
+                Exports["spawnmanager"].spawnPlayer();
+            }), false);
+        }
         public static void InitPlayerPedCommands()
         {
             API.RegisterCommand("gw", new Action<int, List<object>, string>((src, args, raw) =>
@@ -53,6 +61,8 @@ namespace FivemTest.chatcommands
 
                 Vector3 waypointCoords = API.GetBlipCoords(waypoint);
 
+                Debug.WriteLine("Waypointcoords " + waypointCoords.X + waypointCoords.Y + waypointCoords.Z);
+
                 float height = 10000f;
 
                 API.GetGroundZFor_3dCoord(waypointCoords[0], waypointCoords[1], height, ref height, false);
@@ -80,6 +90,11 @@ namespace FivemTest.chatcommands
             {
                 if (Game.PlayerPed.IsDead)
                 {
+                    if (Game.PlayerPed.IsInVehicle())
+                    {
+                        Vehicle veh = Game.PlayerPed.CurrentVehicle;
+                        API.ClearAllPedVehicleForcedSeatUsage(Game.Player.Handle);
+                    }
                     Game.PlayerPed.Resurrect();
                 }
             }), false);
@@ -142,7 +157,6 @@ namespace FivemTest.chatcommands
                     Debug.WriteLine("Would try to attach " + ped + " to " + playerPed.Handle);
                     API.AttachEntityToEntity(ped, playerPed.Handle, 4103, 0, 0.7f, 0, 0f, 0f, 0f, true, false, false, false, 2, true);
                     PedValues.attachedEntity = ped;
-
                 } else
                 {
                     Debug.WriteLine("shit");
@@ -250,6 +264,9 @@ namespace FivemTest.chatcommands
                     }
                 }
             }), false);
+
+            
+
         }
 
     }

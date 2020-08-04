@@ -8,7 +8,7 @@ namespace FivemTest.utils
     {
         public static void SendMessageToClient(string title, string message, int r, int g, int b)
         {
-            var msg = new Dictionary<string, object>
+            Dictionary<string, object> msg = new Dictionary<string, object>
             {
                 ["color"] = new[] { r, g, b },
                 ["args"] = new[] { title, message }

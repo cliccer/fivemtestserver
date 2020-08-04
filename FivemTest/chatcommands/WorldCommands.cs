@@ -4,6 +4,7 @@ using FivemTest.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace FivemTest.chatcommands
 {
@@ -30,6 +31,17 @@ namespace FivemTest.chatcommands
                     Game.WantedMultiplier = 0;
                     ChatUtil.SendMessageToClient("[WantedLevel]", "Wanted multiplier set to " + level, 255, 255, 255);
                 }
+            }
+            ), false);
+
+            API.RegisterCommand("announce", new Action<int, List<object>>((src, args) =>
+            {
+                var argList = args.Select(o => o.ToString()).ToArray();
+                Debug.WriteLine("1");
+                string message = string.Join(" ", argList);
+                Debug.WriteLine("2" + message);
+                TriggerServerEvent("serverAnnouncement", message);
+                Debug.WriteLine("3");
             }
             ), false);
         }
