@@ -265,6 +265,11 @@ namespace FivemTest.chatcommands
                 }
             }), false);
 
+            API.RegisterCommand("invis", new Action<int>(src =>
+            {
+                API.SetPlayerInvisibleLocally(Game.Player.Handle, true);
+            }), false);
+
             
 
         }

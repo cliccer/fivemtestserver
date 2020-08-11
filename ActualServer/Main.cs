@@ -16,7 +16,6 @@ namespace ActualServer
         {
             ServerEvents serverEvents = new ServerEvents();
             Tick += OnTick;
-            
         }
 
         private async Task OnTick()
