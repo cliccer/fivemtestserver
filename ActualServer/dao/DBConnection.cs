@@ -13,19 +13,19 @@ namespace ActualServer.dao
     class DBConnection : BaseScript
     {
 
-        private string databaseName = "fivemtest";
-        private string username = "dbuser";
-        private string password = "password";
-        private string server = "localhost";
+        private static string databaseName = "fivemtest";
+        private static string username = "dbuser";
+        private static string password = "password";
+        private static string server = "localhost";
 
         public DBConnection()
         {
             Connection = CreateConnection();
         }
 
-        public MySqlConnection Connection { get; private set; } = null;
+        public static MySqlConnection Connection { get; private set; } = null;
 
-        private MySqlConnection CreateConnection()
+        private static MySqlConnection CreateConnection()
         {
             Debug.WriteLine("11");
 
