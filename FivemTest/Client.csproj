@@ -54,8 +54,11 @@
     <Compile Include="chatcommands\WorldCommands.cs" />
     <Compile Include="chatcommands\PlayerCommands.cs" />
     <Compile Include="chatcommands\VehicleCommands.cs" />
+    <Compile Include="entities\Character.cs" />
     <Compile Include="enums\Emote.cs" />
-    <Compile Include="entities\PedValues.cs" />
+    <Compile Include="entities\PlayerValues.cs" />
+    <Compile Include="eventhandlers\CharacterEventHandlers.cs" />
+    <Compile Include="eventhandlers\GeneralEventHandlers.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="hud\VehicleHud.cs" />
     <Compile Include="menus\PositionRestrictedMenu.cs" />
@@ -66,9 +69,7 @@
     <Compile Include="utils\ChatUtil.cs" />
     <Compile Include="utils\VehicleUtil.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="eventhandlers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y /d "$(TargetPath)" "C:\FiveM\FXServer-Data\resources\fivemtestserver\"</PostBuildEvent>

@@ -12,9 +12,9 @@ namespace ActualServer.dao
     class AccountDAO
     {
         private MySqlConnection conn;
-        public AccountDAO(MySqlConnection conn)
+        public AccountDAO()
         {
-            this.conn = conn;
+            conn = DBConnection.GetConnection();
         }
 
 
@@ -29,11 +29,6 @@ namespace ActualServer.dao
             {
                 return SaveNewAccount(player);
             }
-
-
-            //MySqlConnection connection = dbConn.Connection;
-            //Debug.WriteLine("2");
-            //MySqlCommand cmd = new MySqlCommand("select version()", connection);
         }
 
         private Account FindAccountFromFivemId(string fivemId)
@@ -57,12 +52,11 @@ namespace ActualServer.dao
             
             return account;
             
-            
         }
 
         private Account SaveNewAccount(Player player)
         {
-            Debug.WriteLine("Account not found in database saving new account for fivem id " + player.Identifiers["fivem"]);
+            Debug.WriteLine("Account not found in database, saving new account for fivem id " + player.Identifiers["fivem"]);
             MySqlCommand cmd = new MySqlCommand("insert into account (fivem_id, name) values(@fivemId, @name)", conn);
             cmd.Parameters.AddWithValue("@fivemID", player.Identifiers["fivem"]);
             cmd.Parameters.AddWithValue("@name", player.Name);

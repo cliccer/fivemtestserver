@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace FivemTest.entities
 {
-    static class PedValues
+    static class PlayerValues
     {
         public static bool shuffleSeat = false;
         public static int attachedEntity = 0;
-
+        public static Character character;
        
     }
 }

@@ -9,12 +9,13 @@ namespace ActualServer
     class AccountManager : BaseScript
     {
 
-        private Dictionary<string, Account> playerHandleAccountMap;
+        private static Dictionary<string, Account> playerHandleAccountMap;
 
         public AccountManager()
         {
             playerHandleAccountMap = new Dictionary<string, Account>();
             InitEventHandlers();
+            AddCurrentPlayers();
         }
 
         private void InitEventHandlers()
@@ -26,7 +27,7 @@ namespace ActualServer
 
         private void OnPlayerConnecting([FromSource] Player player, string playerName)
         {
-            AccountDAO accountDAO = new AccountDAO(DBConnection.Connection);
+            AccountDAO accountDAO = new AccountDAO();
             Account account = accountDAO.GetAccount(player);
             playerHandleAccountMap.Add((int.Parse(player.Handle) - 65535).ToString(), account);
             Debug.WriteLine("Account " + account.Id.ToString() + " " + account.Name + " connected, player " + player.Handle);
@@ -34,7 +35,6 @@ namespace ActualServer
 
         private void OnPlayerDropped([FromSource] Player player, string reason)
         {
-            Debug.WriteLine("OnPlayerDropped" + player.Handle);
             if(playerHandleAccountMap.TryGetValue(player.Handle, out Account account))
             {
                 Debug.WriteLine("Account " + account.Id.ToString() + " " + account.Name + "dropped, player " + player.Handle);
@@ -45,10 +45,28 @@ namespace ActualServer
             }
         }
 
-        public Account GetAccount(Player player)
+        public static Account GetAccount(Player player)
         {
+            Debug.WriteLine("Getting account for player " + player.Handle);
             playerHandleAccountMap.TryGetValue(player.Handle, out Account account);
+            if(account == null)
+            {
+                Debug.WriteLine("GetAccount() Account is null");
+            }
+            Debug.WriteLine("Accountid " + account.Id);
             return account;
+        }
+
+        private async void AddCurrentPlayers()
+        {
+            await Delay(2000);
+            AccountDAO accountDAO = new AccountDAO();
+            PlayerList pl = new PlayerList();
+            foreach(Player player in pl)
+            {
+                Debug.WriteLine("Adding player " + player.Name + " to list of accounts");
+                playerHandleAccountMap.Add(player.Handle , accountDAO.GetAccount(player));
+            }
         }
     }
 }

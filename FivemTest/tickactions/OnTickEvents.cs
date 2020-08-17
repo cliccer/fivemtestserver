@@ -48,7 +48,7 @@ namespace FivemTest.tickactions
         {
 
             Ped ped = Game.PlayerPed;
-            if (ped.IsInVehicle() && !PedValues.shuffleSeat)
+            if (ped.IsInVehicle() && !PlayerValues.shuffleSeat)
             {
                 Vehicle veh = ped.CurrentVehicle;
                 if (ped.IsInHeli && veh.GetPedOnSeat(VehicleSeat.RightFront) == ped && !API.GetIsTaskActive(ped.Handle, 164) && !API.GetIsTaskActive(ped.Handle, 2))

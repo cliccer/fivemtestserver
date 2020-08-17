@@ -105,12 +105,12 @@ namespace FivemTest.chatcommands
             {
                 if(Game.PlayerPed.IsInVehicle() 
                     && (API.GetPedInVehicleSeat(Game.PlayerPed.CurrentVehicle.Handle, 0) ==  Game.PlayerPed.Handle || API.GetPedInVehicleSeat(Game.PlayerPed.CurrentVehicle.Handle, 1) == Game.PlayerPed.Handle)
-                    && !PedValues.shuffleSeat)
+                    && !PlayerValues.shuffleSeat)
                 {
-                    PedValues.shuffleSeat = true;
+                    PlayerValues.shuffleSeat = true;
                     Debug.WriteLine("shuffleSeat = true");
                     await Delay(4000);
-                    PedValues.shuffleSeat = false;
+                    PlayerValues.shuffleSeat = false;
                     Debug.WriteLine("shuffleSeat = false");
                 }
             })), false);
@@ -121,26 +121,26 @@ namespace FivemTest.chatcommands
                 if(argList.Any() && argList[0].Equals("reset"))
                 {
                     Debug.WriteLine("Resetting drag");
-                    PedValues.attachedEntity = 0;
+                    PlayerValues.attachedEntity = 0;
                     return;
                 }
                 if (argList.Any() && argList[0].Equals("check"))
                 {
-                    Debug.WriteLine("attachedEntity = " + PedValues.attachedEntity);
+                    Debug.WriteLine("attachedEntity = " + PlayerValues.attachedEntity);
                     return;
                 }
                 if (argList.Any() && argList[0].Equals("pos"))
                 {
-                    Vector3 pos = API.GetEntityCoords(PedValues.attachedEntity, true);
+                    Vector3 pos = API.GetEntityCoords(PlayerValues.attachedEntity, true);
                     Debug.WriteLine("attachedEntityPosition = x " + pos.X + " y " + pos.Y + " z " + pos.Z);
                     return;
                 }
                 Ped playerPed = Game.PlayerPed;
-                if (PedValues.attachedEntity != 0)
+                if (PlayerValues.attachedEntity != 0)
                 {
-                    Debug.WriteLine("Detaching entity " + PedValues.attachedEntity);
-                    API.DetachEntity(PedValues.attachedEntity, true, true);
-                    PedValues.attachedEntity = 0;
+                    Debug.WriteLine("Detaching entity " + PlayerValues.attachedEntity);
+                    API.DetachEntity(PlayerValues.attachedEntity, true, true);
+                    PlayerValues.attachedEntity = 0;
                     return;
                 }
                 Vector3 playerPos = playerPed.Position;
@@ -156,7 +156,7 @@ namespace FivemTest.chatcommands
                 {
                     Debug.WriteLine("Would try to attach " + ped + " to " + playerPed.Handle);
                     API.AttachEntityToEntity(ped, playerPed.Handle, 4103, 0, 0.7f, 0, 0f, 0f, 0f, true, false, false, false, 2, true);
-                    PedValues.attachedEntity = ped;
+                    PlayerValues.attachedEntity = ped;
                 } else
                 {
                     Debug.WriteLine("shit");
@@ -236,7 +236,7 @@ namespace FivemTest.chatcommands
                         int closestDoor = closestSeat + 1;
                         int ped = API.GetPedInVehicleSeat(veh, closestSeat);
 
-                        if(PedValues.attachedEntity == 0)
+                        if(PlayerValues.attachedEntity == 0)
                         {
                             if(ped == 0)
                             {
@@ -245,7 +245,7 @@ namespace FivemTest.chatcommands
                             API.TaskLeaveVehicle(ped, veh, 16);
                             await Delay(200);
                             API.AttachEntityToEntity(ped, Game.PlayerPed.Handle, 4103, 0, 0.7f, 0, 0f, 0f, 0f, true, false, false, false, 2, true);
-                            PedValues.attachedEntity = ped;
+                            PlayerValues.attachedEntity = ped;
                         } else 
                         {
                             if(ped != 0)
@@ -254,9 +254,9 @@ namespace FivemTest.chatcommands
                             }
                             vehicle.Doors[VehicleUtil.GetVehicleDoorIndexFromSeatIndex(closestDoor)].Open();
                             await Delay(200);
-                            API.DetachEntity(PedValues.attachedEntity, true, true);
-                            API.SetPedIntoVehicle(PedValues.attachedEntity, veh, closestSeat);
-                            PedValues.attachedEntity = 0;
+                            API.DetachEntity(PlayerValues.attachedEntity, true, true);
+                            API.SetPedIntoVehicle(PlayerValues.attachedEntity, veh, closestSeat);
+                            PlayerValues.attachedEntity = 0;
                         }
 
                         await Delay(500);
@@ -271,7 +271,45 @@ namespace FivemTest.chatcommands
             }), false);
 
             
+            API.RegisterCommand("character", new Action<int, List<object>>( (src, args) =>
+            {
+                List<string> argList = args.Select(o => o.ToString()).ToList();
 
+                if (!argList.Any())
+                {
+                    ChatUtil.SendMessageToClient("ERROR", "No argument given, usage: /character [create, list, change]", 255, 0, 0);
+                } else if (argList[0].Equals("create"))
+                {
+                    if(argList.Count >= 3)
+                    {
+                        if (argList[1].All(Char.IsLetter) && argList[2].All(Char.IsLetter))
+                        {
+                            Debug.WriteLine("Sending saveNewCharacter event to server");
+                            TriggerServerEvent("saveNewCharacter", argList[1], argList[2]);
+                            return;
+                        }
+                    }
+                    ChatUtil.SendMessageToClient("ERROR", "Wrong input, usage: /character create [firstname(a-z)] [lastname(a-z)]", 255, 0, 0);
+                } else if (argList[0].Equals("change"))
+                {
+                    if(argList.Count >= 2)
+                    {
+                        if (argList[1].All(Char.IsNumber))
+                        {
+                            TriggerServerEvent("changeCharacter", argList[1]);
+                        }
+                    } else
+                    {
+                        ChatUtil.SendMessageToClient("ERROR", "Wrong input, usage: /character change [id]", 255, 0, 0);
+                    }
+                } else if (argList[0].Equals("list"))
+                {
+                    TriggerServerEvent("listCharactersForAccount");
+                } else if (argList[0].Equals("current"))
+                {
+                    TriggerServerEvent("currentCharacter");
+                }
+            }), false);
         }
 
     }

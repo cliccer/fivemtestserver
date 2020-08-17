@@ -20,22 +20,19 @@ namespace ActualServer.dao
 
         public DBConnection()
         {
-            Connection = CreateConnection();
         }
 
-        public static MySqlConnection Connection { get; private set; } = null;
-
-        private static MySqlConnection CreateConnection()
+        public static MySqlConnection GetConnection()
         {
             Debug.WriteLine("11");
 
             string connectionString = string.Format("Server={0}; database={1}; UID={2}; password={3}", server, databaseName, username, password);
             Debug.WriteLine("12");
-            Connection = new MySqlConnection(connectionString);
+            MySqlConnection connection = new MySqlConnection(connectionString);
             Debug.WriteLine("13");
-            Connection.Open();
+            connection.Open();
             Debug.WriteLine("14");
-            return Connection;
+            return connection;
         }
     }
 }
